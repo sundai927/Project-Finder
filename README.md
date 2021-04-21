@@ -1,7 +1,7 @@
 # cs4750_project
 
 How to run this project locally (and still connect to database)
-1. [Download Xampp](http://www.cs.virginia.edu/~up3f/cs4640/supplement/XAMPP-setup.html) (this lets you run PHP files on your local computer)
+1. [Download Xampp](https://www.apachefriends.org/download.html) (this lets you run PHP files on your local computer)
 2. Find the xampp folder on your computer (windows should be C:\xampp unless you changed it)
 3. Go into the htdocs folder
 4. clone the project into that folder
