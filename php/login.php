@@ -8,7 +8,8 @@
  }
 
 
- $sql="SELECT * FROM User WHERE userID='$_POST[email]' AND password='$_POST[password]'";
+ $sql="SELECT * FROM User WHERE userID='$_POST[email]' AND password= SHA1('$_POST[password]')";
+ 
 
 
  if (!mysqli_query($con,$sql)) {

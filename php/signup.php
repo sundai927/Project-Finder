@@ -19,7 +19,9 @@
 if (mysqli_num_rows($result) == 0){
 
     $sql ="INSERT INTO User (userID, name ,password)
-    VALUES ('$_POST[email]', 'test name', '$_POST[password]')";
+    
+    VALUES ('$_POST[email]', 'test name', SHA1('$_POST[password]'))";
+    
     $insert_result = mysqli_query($con,$sql);
 
      if (!$insert_result) {

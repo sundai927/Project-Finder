@@ -147,6 +147,7 @@
       var emailValid = pattern.test(email.value);
 
       var password = document.getElementById("password-input");
+      
       var passwordValid = false
       if (password.value.length >= 3) {
         passwordValid = true
