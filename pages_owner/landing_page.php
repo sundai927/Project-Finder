@@ -25,8 +25,8 @@
 <?php 
   //starts the user session. just put this in every file that you want the user to be logged in.
     session_start(); 
-    if (isset($_SESSION["userID"])){
-      header("Location: ./main_feed.php");
+    if (isset($_SESSION["ownerID"])){
+      header("Location: ./my_projects.php");
     }
 
      ?>

@@ -9,30 +9,36 @@
   <meta name="author" content="your name">
   <meta name="description" content="include some description about your page">
 
-  <title>My Projects</title>
+  <title>Template</title>
 
-  <!-- bootstrap -->
+
+  <!-- Code to allow bootstrap -->
+  <!-- Bootstrap provides nice styles for elements like buttons and forms -->
+  <!-- Documentation: https://getbootstrap.com/docs/5.0/getting-started/introduction/ -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
     integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
-
+    <!-- This is how you include a style sheet in PHP -->
   <style>
-    <?php include '../stylesheets/owner/my_projects.css'; ?>
+    <?php 
+        include '../stylesheets/user/template.css'; 
+    ?>
   </style>
+
 </head>
 
 <body>
-<?php 
-    session_start();
-    if (!isset($_SESSION["ownerID"])){
-      $_SESSION["login_error_message"] = "Please login to continue.";
-      header("Location: ./landing_page.php");
-    }
+    <?php 
+        //  This starts the user session. Allows you to access the $_SESSION object in PHP
+        // I use the $_SESSION object to store things like userID/ownerID
+        session_start();
      ?>
+
+    <!-- Header element contains the navbar -->
   <header>
     <nav class="navbar navbar-expand-md bg-light navbar-light">
-      <a class="navbar-brand" href="./landing_page.php">Project Finder</a>
-      <text class="nav-link" >Logged in as <?php echo $_SESSION["ownerID"] . " [Project Owner]";?></text>
+      <a class="navbar-brand" href="./pages_user/landing_page.php">Project Finder</a>
+      <text class="nav-link" >Logged in as <?php echo $_SESSION["userID"];?></text>
 
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
         <span class="navbar-toggler-icon"></span>
@@ -51,10 +57,26 @@
     </nav>
   </header>
 
+  <!-- Checks if the user/owner is logged in. If they're not, redirects them to the landing_page -->
+  <?php 
+    // For users
+        // if (!isset($_SESSION["userID"])){
+        //   $_SESSION["login_error_message"] = "Please login to continue.";
+        //   header("Location: ./landing_page.php");
+        // }
+
+    //For Owners
+        // if (!isset($_SESSION["ownerID"])){
+        //     $_SESSION["login_error_message"] = "Please login to continue.";
+        //     header("Location: ./landing_page.php");
+        //   }
+
+     ?>
+
   <div class="container">
-    
+    <!-- This gets the DB credentials from the PHP folder and connects to phpMyAdmin  -->
     <?php
-      require_once('../php/library.php');
+      require_once('./php/library.php');
       $con = new mysqli($SERVER, $USERNAME, $PASSWORD, $DATABASE);
       // Check connection
       if (mysqli_connect_errno()) {
@@ -65,12 +87,11 @@
       
       mysqli_close($con);
     ?>
-    
-      <h3>My Projects</h3>
-
   </div>
 
-  <!-- CDN for JS bootstrap -->
+  
+
+  <!-- Some boiler plate code, best to leave it (not sure what it does) -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
     crossorigin="anonymous"></script>

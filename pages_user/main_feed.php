@@ -31,7 +31,7 @@
      ?>
   <header>
     <nav class="navbar navbar-expand-md bg-light navbar-light">
-      <a class="navbar-brand" href="#">Project Planner</a>
+      <a class="navbar-brand" href="./landing_page.php">Project Finder</a>
       <text class="nav-link" >Logged in as <?php echo $_SESSION["userID"];?></text>
 
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
