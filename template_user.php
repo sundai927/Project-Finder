@@ -9,26 +9,32 @@
   <meta name="author" content="your name">
   <meta name="description" content="include some description about your page">
 
-  <title>My Feed</title>
+  <title>Template</title>
 
-  <!-- bootstrap -->
+
+  <!-- Code to allow bootstrap -->
+  <!-- Bootstrap provides nice styles for elements like buttons and forms -->
+  <!-- Documentation: https://getbootstrap.com/docs/5.0/getting-started/introduction/ -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
     integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
-
+    <!-- This is how you include a style sheet in PHP -->
   <style>
-    <?php include '../stylesheets/user/main_feed.css'; ?>
+    <?php 
+        include '../stylesheets/user/template.css'; 
+    ?>
   </style>
+
 </head>
 
 <body>
-<?php 
-    session_start();
-    if (!isset($_SESSION["userID"])){
-      $_SESSION["login_error_message"] = "Please login to continue.";
-      header("Location: ./landing_page.php");
-    }
+    <?php 
+        //  This starts the user session. Allows you to access the $_SESSION object in PHP
+        // I use the $_SESSION object to store things like userID/ownerID
+        session_start();
      ?>
+
+    <!-- Header element contains the navbar -->
 <header>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="./landing_page.php">Project Finder</a>
@@ -37,14 +43,13 @@
     </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto mr-auto">
-          <li class="nav-item active">
+        <li class="nav-item active">
             <a class="nav-link" href="#">Main Feed <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
           <a class="nav-link" href="#">My Followed Projects <span class="sr-only">(current)</span></a>
 
           </li>
-
         </ul>
       <div class="btn-group">
         <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -69,11 +74,26 @@
     </nav>
 </header>
 
-  <div class="container">
-    
+  <!-- Checks if the user/owner is logged in. If they're not, redirects them to the landing_page -->
+  <?php 
+    // For users
+        // if (!isset($_SESSION["userID"])){
+        //   $_SESSION["login_error_message"] = "Please login to continue.";
+        //   header("Location: ./landing_page.php");
+        // }
 
+    //For Owners
+        // if (!isset($_SESSION["ownerID"])){
+        //     $_SESSION["login_error_message"] = "Please login to continue.";
+        //     header("Location: ./landing_page.php");
+        //   }
+
+     ?>
+
+  <div class="container">
+    <!-- This gets the DB credentials from the PHP folder and connects to phpMyAdmin  -->
     <?php
-      require_once('../php/library.php');
+      require_once('./php/library.php');
       $con = new mysqli($SERVER, $USERNAME, $PASSWORD, $DATABASE);
       // Check connection
       if (mysqli_connect_errno()) {
@@ -84,63 +104,17 @@
       
       mysqli_close($con);
     ?>
-    
-
-      <h3>Main Feed</h3>
-
   </div>
 
-  <script>
-    var clickHandler = () => {
-      console.log("clicked")
-    }
+  
 
-    removeButtonHandler = (element) => {
-
-      element.parentElement.style.display = 'none';
-      element.parentElement.submit();
-    }
-
-
-    var toggleNewProjectForm = () =>{
-      var newProjectForm = document.getElementById("new-project-form-container");
-      if (newProjectForm.style.display === "none"){
-        newProjectForm.style.display = "block";
-      } else{
-        newProjectForm.style.display = "none";
-        setProjectFormErrorMsg("")
-
-      }
-    }
-
-    var setProjectFormErrorMsg = (msg) =>{
-      var msgDiv = document.getElementById("new-project-form-error-msg");
-      msgDiv.textContent = msg;
-    }
-
-    var checkProjectName = () =>{
-      var projectName = document.getElementById("new_project_name");
-      if (tripName.value.length === 0){
-        setProjectFormErrorMsg("Project name cannot be empty.")
-        return false
-      } else{
-        return true;
-      }
-    }
-
-  </script>
-
-  <!-- CDN for JS bootstrap -->
+  <!-- Some boiler plate code, best to leave it (not sure what it does) -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
     crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
     crossorigin="anonymous"></script>
-
-
-
-
 
 </body>
 

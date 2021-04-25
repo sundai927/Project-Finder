@@ -35,27 +35,40 @@
      ?>
 
     <!-- Header element contains the navbar -->
-  <header>
-    <nav class="navbar navbar-expand-md bg-light navbar-light">
-      <a class="navbar-brand" href="./pages_user/landing_page.php">Project Finder</a>
-      <text class="nav-link" >Logged in as <?php echo $_SESSION["userID"];?></text>
-
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-
-      <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
-        <ul class="navbar-nav mx-auto">
-
-          <li class="nav-item">
-            <a class="nav-link" href="logout.php">Log out</a>
+<header>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="./landing_page.php">Project Finder</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">My Projects<span class="sr-only">(current)</span></a>
           </li>
-
         </ul>
+      <div class="btn-group">
+        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          My Profile
+        </button>
+        <div class="dropdown-menu dropdown-menu-right">
+          <div class="dropdown-item-text text-nowrap">
+            
+            <?php if(isset($_SESSION["ownerID"])){
+                echo "Logged in as $_SESSION[ownerID]";
+                echo " [Project Owner]";
+              } else{
+                echo "Logged in as $_SESSION[userID]";
+              }
+              
+              ?>
+          </div>
+          <a class="dropdown-item" href="#">My profile</a>
+          <a class="dropdown-item"  href="./logout.php">Log out</a>
+        </div>
       </div>
     </nav>
-  </header>
+</header>
 
   <!-- Checks if the user/owner is logged in. If they're not, redirects them to the landing_page -->
   <?php 
