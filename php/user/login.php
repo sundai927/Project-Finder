@@ -1,5 +1,5 @@
 <?php
- include_once("./library.php"); // To connect to the database
+ include_once("../library.php"); // To connect to the database
 
  $con = new mysqli($SERVER, $USERNAME, $PASSWORD, $DATABASE);
  // Check connection
@@ -34,11 +34,11 @@ if (mysqli_num_rows($result) > 0){
         unset($_SESSION["login_error_message"]);
     }
 
-    header("Location: ../homepage.php");
+    header("Location: ../../pages_user/main_feed.php");
 } else{
 
     $_SESSION["login_error_message"] = "Incorrect username and password.";
-    header("Location: ../landing_page.php");
+    header("Location: ../../pages_user/landing_page.php");
 
 }
 

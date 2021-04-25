@@ -6,6 +6,6 @@
         }
         session_destroy();    
     }
-    header("Location: landing_page.php");
+    header("Location: ./landing_page.php");
 ?>
 

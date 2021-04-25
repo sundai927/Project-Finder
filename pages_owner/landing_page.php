@@ -15,9 +15,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
     integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
-  <link rel="stylesheet" href="./stylesheets/landing_page.css" />
   <style>
-    <?php include './stylesheets/landing_page.css'; ?>
+    <?php include '../stylesheets/owner/landing_page.css'; ?>
   </style>
 
 </head>
@@ -27,7 +26,7 @@
   //starts the user session. just put this in every file that you want the user to be logged in.
     session_start(); 
     if (isset($_SESSION["userID"])){
-      header("Location: ./homepage.php");
+      header("Location: ./main_feed.php");
     }
 
      ?>
@@ -49,12 +48,12 @@
   <div class="container">
     <div class="landing-image">
       <img
-        src="https://images.unsplash.com/photo-1452860606245-08befc0ff44b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1008&q=80">
+        src="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=50">
     </div>
 
     <div id="login-signup-panel" style="display: block">
-      <form id="login-signup-panel-form" onsubmit="return checkLoginCredentials()" action="./php/login.php" method="post">
-      <h3 id="login-signup-panel-title">Log in</h3>
+      <form id="login-signup-panel-form" onsubmit="return checkLoginCredentials()" action="../php/owner/login.php" method="post">
+      <h3 id="login-signup-panel-title">Project Owner Log In</h3>
       <div class="signup-msg">
             <?php 
               if(isset($_SESSION['signup_success'])) {
@@ -88,6 +87,14 @@
             ?>
           </div>
         </div>
+        <div class="form-group" id="signup-name">
+          <label for="exampleInputName">Name</label>
+          <input type="text" name="signup_name" class="form-control" id="signup-name-input" placeholder="Enter your name">
+        </div>
+        <div class="feedback">
+          <div id="name-msg"></div>
+        </div>
+
 
         <div class="submit-button">
           <button id="login-button" type="submit" class="btn btn-primary" >Log in</button>
@@ -97,6 +104,9 @@
         </div>
 
       </form>
+      <div id="login-as-user">
+          <button type="button" class="btn btn-outline-primary" onclick="location.href='../pages_user/landing_page.php';">Log in as a normal user</button>
+      </div>
     </div>
 
 
@@ -138,6 +148,20 @@
       email.addEventListener('blur', checkEmail, false);
       var login = function () {
       }
+
+      function checkName(){
+        var msg = document.getElementById("name-msg");
+        if (this.value.length == 0) {
+          msg.textContent = "Name cannot be empty";
+
+        } else if (this.value.length > 15) {
+          msg.textContent = "Name cannot be longer than 15 characters";
+        } else
+          msg.textContent = "";
+      }
+      var currSignUpName = document.getElementById("signup-name-input");
+      currSignUpName.addEventListener('blur', checkName, false);
+
     }
     addEventListenersToInput()
 
@@ -148,6 +172,8 @@
 
       var password = document.getElementById("password-input");
       
+      // var name = document.getElementBy
+
       var passwordValid = false
       if (password.value.length >= 3) {
         passwordValid = true
@@ -164,10 +190,11 @@
       var panelFormURL = panelForm.action.toString()
       var loginButton = document.getElementById("login-button");
       var signUpButton = document.getElementById("signup-button");
+      var signUpName = document.getElementById("signup-name");
 
       if (panelFormURL.substr(panelFormURL.length - 9) === "login.php"){
-        panelForm.action = "./php/signup.php";
-        panelTitle.textContent = "Sign up";
+        panelForm.action = "../php/owner/signup.php";
+        panelTitle.textContent = "Project Owner Sign Up";
         loginButton.className = "btn btn-secondary";
         signUpButton.className = "btn btn-primary";
 
@@ -176,10 +203,12 @@
 
         signUpButton.setAttribute("type", "submit");
         signUpButton.removeAttribute("onclick");
+        signUpName.style.display = "block";
+
 
       } else if (panelFormURL.substr(panelFormURL.length - 10) === "signup.php"){
-        panelForm.action = "./php/login.php";
-        panelTitle.textContent = "Log in";
+        panelForm.action = "../php/owner/login.php";
+        panelTitle.textContent = "Project Owner Log In";
         signUpButton.className = "btn btn-secondary";
         loginButton.className = "btn btn-primary";
 
@@ -188,6 +217,9 @@
 
         loginButton.setAttribute("type", "submit");
         loginButton.removeAttribute("onclick");
+        signUpName.style.display = "none";
+        var msg = document.getElementById("name-msg");
+        msg.textContent = "";
       }
       var email = document.getElementById("email-input");
       email.value = "";

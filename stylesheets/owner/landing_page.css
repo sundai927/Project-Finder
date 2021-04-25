@@ -60,3 +60,12 @@ form{
     margin-left: 5px;
     margin-right: 5px;
 }
+
+#signup-name{
+    display:none;
+}
+
+#login-as-user{
+    display:flex;
+    justify-content:center;
+}

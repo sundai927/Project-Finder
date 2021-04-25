@@ -9,7 +9,7 @@
   <meta name="author" content="your name">
   <meta name="description" content="include some description about your page">
 
-  <title>My Projects</title>
+  <title>My Feed</title>
 
   <!-- bootstrap -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
@@ -17,7 +17,7 @@
 
 
   <style>
-    <?php include './stylesheets/homepage.css'; ?>
+    <?php include '../stylesheets/user/main_feed.css'; ?>
   </style>
 </head>
 
@@ -53,9 +53,9 @@
 
   <div class="container">
     
-    <div class="trip-icon-grid">
+
     <?php
-      require_once('./php/library.php');
+      require_once('../php/library.php');
       $con = new mysqli($SERVER, $USERNAME, $PASSWORD, $DATABASE);
       // Check connection
       if (mysqli_connect_errno()) {
@@ -67,30 +67,8 @@
       mysqli_close($con);
     ?>
     
-      
-    </div>
 
-    <div class="new-project-button">
-      <button class="btn btn-primary" onclick="toggleNewProjectForm()">Add a new Project</button>
-    </div>
-
-    <div id="new-project-form-container" style="display: none;">
-      <div class="card" style="padding: 20px; width: 300px;">
-
-        <form onsubmit="return  checkProjectName()" id="new-project-form" action="./php/create_project.php" method="post" style="display: flex; flex-direction: column; justify-content: center; align-content: center;">
-          <div class="form-group">
-            <label >Project Name</label>
-            <input type="text" class="form-control" name="new_project_name" id="new_project_name" placeholder="Enter your project's name">
-          </div>
-          <div>
-            <button type="submit" class="btn btn-primary" style="width: 90px; margin: 5px;">Create!</button>
-            <button type="button" class="btn btn-secondary" onclick="toggleNewProjectForm()" style="width: 90px; margin: 5px;">Cancel</button>
-          </div>
-        </form>
-        <div id="new-project-form-error-msg" style="margin: 5px; color: red;"> 
-        </div>
-        </div>  
-    </div>
+      <h3>Main Feed</h3>
 
   </div>
 
