@@ -28,7 +28,7 @@ if (mysqli_num_rows($result) == 0){
         die('Error: ' . mysqli_error($con));
         $_SESSION["signup_success"] = false;
         $_SESSION["signup_error_message"] = "Server error. Please try again later.";
-        header("Location: ../pages_user/landing_page.php");
+        header("Location: ../pages_owner/landing_page.php");
      } else{
         $_SESSION["signup_success"] = true;
         if (isset($_SESSION["login_error_message"])){
@@ -40,7 +40,7 @@ if (mysqli_num_rows($result) == 0){
            //clears signup messages
             unset($_SESSION["signup_error_message"]);
         }
-        header("Location: ../../pages_user/landing_page.php");
+        header("Location: ../../pages_owner/landing_page.php");
      }
 } else{
 
