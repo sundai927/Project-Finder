@@ -65,6 +65,7 @@
 </header>
 
   <div class="container">
+  <h3>My Projects</h3>
     
     <?php
       require_once('../php/library.php');
@@ -75,13 +76,49 @@
         mysqli_connect_error());
         return null;
       }
+
+      $sql = "SELECT * FROM Project NATURAL JOIN Proposes
+              WHERE ownerID= '$_SESSION[ownerID]'";
+      $result = mysqli_query($con,$sql);
+      // Print the data from the table in a table
+      echo "<table class='table'>
+                <thead>
+                    <tr>
+                        <th scope='col'>Project_Name</th>
+                        <th scope='col'>Project_Description</th>
+                        <th scope='col'></th>
+                    </tr>
+                </thead>
+                <tbody>";
+       while($row = mysqli_fetch_array($result)) {
+          echo "<tr>
+          <th scope='row'>" . $row['project_name'] . "</th>
+          <td>" . $row['project_description'] . "</td>";
+
+          echo "
+            <td>
+                <form action='./useful_example2.php', method='post'>
+                    <input type='text' name='project_name' value='". $row['project_name'] ."' style='display: none;'>
+                    <input type='text' name='project_description' value='". $row['project_description'] ."' style='display: none;'>
+                    
+                    <button type='submit' class='btn btn-primary'>More Info</button>
+                </form>
+            </td>
+        ";
+
+        echo "</tr>";
+       }
       
       mysqli_close($con);
+
     ?>
     
-      <h3>My Projects</h3>
+      
+      
 
   </div>
+
+  
 
   <!-- CDN for JS bootstrap -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
