@@ -9,26 +9,32 @@
   <meta name="author" content="your name">
   <meta name="description" content="include some description about your page">
 
-  <title>My Projects</title>
+  <title>Template</title>
 
-  <!-- bootstrap -->
+
+  <!-- Code to allow bootstrap -->
+  <!-- Bootstrap provides nice styles for elements like buttons and forms -->
+  <!-- Documentation: https://getbootstrap.com/docs/5.0/getting-started/introduction/ -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
     integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
-
+    <!-- This is how you include a style sheet in PHP -->
   <style>
-    <?php include '../stylesheets/owner/my_projects.css'; ?>
+    <?php 
+        include '../stylesheets/owner/project_page.css'; 
+    ?>
   </style>
+
 </head>
 
 <body>
-<?php 
-    session_start();
-    if (!isset($_SESSION["ownerID"])){
-      $_SESSION["login_error_message"] = "Please login to continue.";
-      header("Location: ./landing_page.php");
-    }
+    <?php 
+        //  This starts the user session. Allows you to access the $_SESSION object in PHP
+        // I use the $_SESSION object to store things like userID/ownerID
+        session_start();
      ?>
+
+    <!-- Header element contains the navbar -->
 <header>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="./landing_page.php">Project Finder</a>
@@ -38,7 +44,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">My Projects <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="#">My Projects<span class="sr-only">(current)</span></a>
           </li>
         </ul>
       <div class="btn-group">
@@ -64,9 +70,24 @@
     </nav>
 </header>
 
+  <!-- Checks if the user/owner is logged in. If they're not, redirects them to the landing_page -->
+  <?php 
+    // For users
+        // if (!isset($_SESSION["userID"])){
+        //   $_SESSION["login_error_message"] = "Please login to continue.";
+        //   header("Location: ./landing_page.php");
+        // }
+
+    //For Owners
+        if (!isset($_SESSION["ownerID"])){
+            $_SESSION["login_error_message"] = "Please login to continue.";
+            header("Location: ./landing_page.php");
+          }
+
+     ?>
+
   <div class="container">
-  <h3>My Projects</h3>
-    
+    <!-- This gets the DB credentials from the PHP folder and connects to phpMyAdmin  -->
     <?php
       require_once('../php/library.php');
       $con = new mysqli($SERVER, $USERNAME, $PASSWORD, $DATABASE);
@@ -76,51 +97,24 @@
         mysqli_connect_error());
         return null;
       }
+      
+      echo "<h3>Edit Project</h3>";
+      echo "Project name:" . $_POST["project_name"];
+      echo "</br>";
+      echo "Project Description:" . $_POST["project_description"];
+      echo "</br>";
+      echo "<form>
+      <input type='button' class='btn btn-primary' value='Back to Projects Page' onclick='history.back()'>  
+      </form>";
 
-      $sql = "SELECT * FROM Project NATURAL JOIN Proposes
-              WHERE ownerID= '$_SESSION[ownerID]'";
-      $result = mysqli_query($con,$sql);
-      // Print the data from the table in a table
-      echo "<table class='table'>
-                <thead>
-                    <tr>
-                        <th scope='col'>Project_Name</th>
-                        <th scope='col'>Project_Description</th>
-                        <th scope='col'></th>
-                    </tr>
-                </thead>
-                <tbody>";
-       while($row = mysqli_fetch_array($result)) {
-          echo "<tr>
-          <th scope='row'>" . $row['project_name'] . "</th>
-          <td>" . $row['project_description'] . "</td>";
-
-          echo "
-            <td>
-                <form action='./project_page.php', method='post'>
-                    <input type='text' name='project_name' value='". $row['project_name'] ."' style='display: none;'>
-                    <input type='text' name='project_description' value='". $row['project_description'] ."' style='display: none;'>
-                    
-                    <button type='submit' class='btn btn-primary'>More Info</button>
-                </form>
-            </td>
-        ";
-
-        echo "</tr>";
-       }
       
       mysqli_close($con);
-
     ?>
-    
-      
-      
-
   </div>
 
   
 
-  <!-- CDN for JS bootstrap -->
+  <!-- Some boiler plate code, best to leave it (not sure what it does) -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
     crossorigin="anonymous"></script>
