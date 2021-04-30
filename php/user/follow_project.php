@@ -29,12 +29,8 @@
     $max_member_count_result = mysqli_query($con, $max_member_count_sql);
     while($max_member_count_row = mysqli_fetch_array($max_member_count_result)) {
         $max_member_count = $max_member_count_row["max_participants"];
-        // print_r($max_member_count_row);
       }
-    //   echo $user_in_project;
-    //   echo $curr_participants;
-    //   echo $max_member_count;
-    //   print_r($_POST);
+
       if($user_in_project && $_POST['formAction'] == "unfollow"){
         $unfollow_sql = "DELETE FROM Joins WHERE userID='$_SESSION[userID]' AND projectID='$_POST[projectID]'";
         $unfollow_result = mysqli_query($con, $unfollow_sql);
