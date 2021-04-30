@@ -72,21 +72,75 @@
   <div class="container">
     
 
-    <?php
-      require_once('../php/library.php');
-      $con = new mysqli($SERVER, $USERNAME, $PASSWORD, $DATABASE);
-      // Check connection
-      if (mysqli_connect_errno()) {
-        echo("Can't connect to MySQL Server. Error code: " .
-        mysqli_connect_error());
-        return null;
-      }
-      
-      mysqli_close($con);
-    ?>
-    
+  <?php
+    require_once('../php/library.php');
+    $con = new mysqli($SERVER, $USERNAME, $PASSWORD, $DATABASE);
+    // Check connection
+    if (mysqli_connect_errno()) {
+    echo("Can't connect to MySQL Server. Error code: " .
+    mysqli_connect_error());
+    return null;
+    }
+    // Form the SQL query (a SELECT query)
+    $sql="SELECT * 
+    FROM 
+      (SELECT * FROM Has NATURAL JOIN Project) AS project_info
+    WHERE project_info.category_name IN (SELECT category_name FROM Prefers WHERE userID = '$_SESSION[userID]');";
 
-      <h3>Main Feed</h3>
+
+    $result = mysqli_query($con, $sql);
+    while($row = mysqli_fetch_array($result)) {
+        // echo " " . $row['category_name'];
+        // echo " " . $row['project_name'];
+        // echo " " . $row['max_participants'];
+        // echo " " . $row['project_description'];
+        // echo "<br>";
+        $participant_count_sql = "SELECT COUNT(projectID) AS member_count, projectID FROM (SELECT * FROM Has NATURAL JOIN Project) AS project_info NATURAL JOIN Joins WHERE projectID='$row[projectID]' GROUP BY projectID";
+        $count_result = mysqli_query($con, $participant_count_sql);
+        if (mysqli_num_rows($count_result) == 0) { 
+          $curr_participants = 0;
+       } else { 
+        // $curr_participants = current(mysqli_fetch_array($count_result))["member_count"];
+        while($count_row = mysqli_fetch_array($count_result)) {
+          $curr_participants = $count_row["member_count"];
+        }
+       }
+      //  echo $curr_participants;
+       $participant_fill_percentage = $curr_participants / $row["max_participants"] * 100;
+        echo "
+        <form style='min-width: 60%; max-width: 60%; padding-top: 20px; padding-bottom: 20px;' action='follow_project.php'>
+          <div class='card' >
+            <div class='card-body'>
+              <div style='display:flex; justify-content:space-between; align-items: center;'>
+                <h5 class='card-title'>". $row['project_name'] ."</h5>
+                <button type='submit' class='btn btn-primary'>Follow</button>
+              </div>
+              <h6 class='card-subtitle mb-2 text-muted'>". $row['category_name'] ."</h6>
+              <div class='card-text'>". $row['project_description'] ."</div>
+              <div class='project-capacity' style='padding-top: 10px; padding-bottom: 10px;'>
+                <div style='display: flex; justify-content: space-between; align-items: center;'>
+                  <div>Current participants:</div>
+                  <div class='progress' style='width: 70%'>";
+                  if($curr_participants > 0){
+                    echo "<div class='progress-bar' role='progressbar' style='width: ". $participant_fill_percentage ."%;' aria-valuenow='". $curr_participants ."' aria-valuemin='0' aria-valuemax='10'>". $curr_participants ."</div>";
+
+                  } else{
+                    echo "<div class='progress-bar' role='progressbar' style='width: 5%;' aria-valuenow='". $curr_participants ."' aria-valuemin='0' aria-valuemax='10'>". 0 ."</div>";
+                  }
+
+            echo "</div>
+                </div>
+                
+              </div>
+              <div style='font-weight: bold;'>Max participants: ". $row['max_participants'] ."</div>
+      
+            </div>
+          </div>
+        </form>";
+    }
+  ?>
+
+      
 
   </div>
 
