@@ -90,31 +90,47 @@
 
     $result = mysqli_query($con, $sql);
     while($row = mysqli_fetch_array($result)) {
-        // echo " " . $row['category_name'];
-        // echo " " . $row['project_name'];
-        // echo " " . $row['max_participants'];
-        // echo " " . $row['project_description'];
-        // echo "<br>";
+
         $participant_count_sql = "SELECT COUNT(projectID) AS member_count, projectID FROM (SELECT * FROM Has NATURAL JOIN Project) AS project_info NATURAL JOIN Joins WHERE projectID='$row[projectID]' GROUP BY projectID";
         $count_result = mysqli_query($con, $participant_count_sql);
         if (mysqli_num_rows($count_result) == 0) { 
           $curr_participants = 0;
        } else { 
-        // $curr_participants = current(mysqli_fetch_array($count_result))["member_count"];
         while($count_row = mysqli_fetch_array($count_result)) {
           $curr_participants = $count_row["member_count"];
         }
        }
+
+       $project_membership_query = "SELECT * FROM Joins WHERE userID = '$_SESSION[userID]' AND projectID = '$row[projectID]'";
+       $project_membership_result = mysqli_query($con, $project_membership_query);
+       if(mysqli_num_rows($project_membership_result) == 0){
+        $in_project = false;
+        // echo "false";
+       } else{
+         $in_project = true;
+        //  echo "true";
+       }
+      //  echo $in_project;
       //  echo $curr_participants;
        $participant_fill_percentage = $curr_participants / $row["max_participants"] * 100;
         echo "
-        <form style='min-width: 60%; max-width: 60%; padding-top: 20px; padding-bottom: 20px;' action='follow_project.php'>
+        <form style='min-width: 60%; max-width: 60%; padding-top: 20px; padding-bottom: 20px;' action='../php/user/follow_project.php' method='post'>
+          <input style='display: none;' name='projectID' value='". $row['projectID'] ."'>
           <div class='card' >
             <div class='card-body'>
               <div style='display:flex; justify-content:space-between; align-items: center;'>
-                <h5 class='card-title'>". $row['project_name'] ."</h5>
-                <button type='submit' class='btn btn-primary'>Follow</button>
-              </div>
+                <h5 class='card-title'>". $row['project_name'] ."</h5>";
+                if($in_project){
+                  echo "<button type='submit' class='btn' style='background-color: #FF2C55; color: white;'>Unfollow</button>
+                  <input name='formAction' value='unfollow' hidden>";      
+                } else if ($participant_fill_percentage == 100){
+                  echo "<button type='submit' class='btn btn-secondary' disabled>Project Full</button>";
+                        
+                } else{
+                  echo "<button type='submit' class='btn btn-primary' >Follow</button>
+                        <input name='formAction' value='follow' hidden>";
+                }
+        echo "</div>
               <h6 class='card-subtitle mb-2 text-muted'>". $row['category_name'] ."</h6>
               <div class='card-text'>". $row['project_description'] ."</div>
               <div class='project-capacity' style='padding-top: 10px; padding-bottom: 10px;'>
