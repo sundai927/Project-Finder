@@ -10,9 +10,12 @@
       $newName = $_POST['newName'];
       $projectID = $_POST['projectID'];
       $newDescription = $_POST['newDescription'];
-      if ($newName != "") {
+      $newCategory = $_POST['newCategory'];
+      if ($newName != "" && $newDescription != "") {
           $sqlName = "UPDATE Project 
                       SET project_name = '".$newName."', project_description = '".$newDescription."'  WHERE projectID = '".$projectID."' ";
           $result = mysqli_query($con,$sqlName);
       }
+      $sqlcategory = "UPDATE Has SET category_name = '".$newCategory."' WHERE projectID = '".$projectID."' ";
+      $result_category = mysqli_query($con,$sqlcategory);
   ?>

@@ -87,6 +87,7 @@
                     <tr>
                         <th scope='col'>Project Name</th>
                         <th scope='col'>Project Description</th>
+                        <th scope='col'>Project Category</th>
                         <th scope='col'></th>
                     </tr>
                 </thead>
@@ -94,7 +95,8 @@
        while($row = mysqli_fetch_array($result)) {
           echo "<tr>
           <th scope='row'>" . $row['project_name'] . "</th>
-          <td>" . $row['project_description'] . "</td>";
+          <td>" . $row['project_description'] . "</td>
+          <td>" . $row['category_name'] . "</td>";
 
           echo "
             <td>

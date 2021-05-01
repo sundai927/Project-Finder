@@ -114,10 +114,9 @@
       </thead>
       <tbody>";
 
-    echo "<tr>
-    <th scope='row'><div contenteditable id='edit_name' onblur='saveInput()'>" . $_POST["project_name"] . "</div></th>
-    <td><div contenteditable id='edit_description' onblur='saveInput()'>" . $_POST["project_description"] . "</div></td>
-    <td><div>" . $_POST["category_name"] . "</div></td>";
+    
+                                          
+
     
     echo "<p hidden id='projectID'>" . $_POST["project_id"] . "</p>";
 
@@ -127,15 +126,19 @@
       
       
     ?>
-
-    <select name="categories">
-      <?php
-      while ($rows = $categories->fetch_assoc()) {
+    
+    <tr>
+    <th scope='row'><div contenteditable id='edit_name' onblur='saveInput()'><?php print_r($_POST["project_name"]); ?> </div></th>
+    <td><div contenteditable id='edit_description' onblur='saveInput()'><?php print_r($_POST["project_description"]); ?> </div></td>
+    <td><div><select name='categories' id='categories' onBlur="saveInput()"><option value=<?php print_r($_POST["category_name"]); ?> selected><?php print_r($_POST["category_name"]); ?> </option>
+    <?php while ($rows = $categories->fetch_assoc()) {
         $cat_name = $rows['category_name'];
-        echo "<option value='$cat_name'>$cat_name</option>";
-      }
-      ?>
-    </select>
+        if ($cat_name != $_POST["category_name"])
+          echo "<option value='$cat_name'>$cat_name</option>";
+        }
+    ?></select> </div></td>
+
+    
   </div>
 
   <!-- Close the database connection -->
@@ -151,8 +154,10 @@
       var nameInput = document.getElementById("edit_name").innerHTML;
       var descriptionInput = document.getElementById("edit_description").innerHTML;
       var projectID = document.getElementById("projectID").innerHTML;
+      var categoryInput = document.getElementById("categories");
+      var selectedCategory = categoryInput.options[categoryInput.selectedIndex].text;
       
-      var params = "newName=" + nameInput + "&projectID=" + projectID + "&newDescription=" + descriptionInput;
+      var params = "newName=" + nameInput + "&projectID=" + projectID + "&newDescription=" + descriptionInput + "&newCategory=" + selectedCategory;
     
       xr.open("POST", url, true);
       xr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
