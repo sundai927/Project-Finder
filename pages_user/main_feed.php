@@ -89,9 +89,12 @@
 
 
     $result = mysqli_query($con, $sql);
-    echo "<div style='width: 100%;' class='d-flex justify-content-center'>
+    echo "<div style='width: 100%; flex-direction: column; align-items:center;' class='d-flex'>
             <h3>From your preferences</h3>
-          </div>";
+            <div style='padding-top: 5px;'>
+              <button id='toggleFullProjectsBtn' class='btn btn-primary' onclick='hideFullProjectsHandler()'>Hide full projects</button>
+              </div>
+            </div>";
     while($row = mysqli_fetch_array($result)) {
 
         $participant_count_sql = "SELECT COUNT(projectID) AS member_count, projectID FROM (SELECT * FROM Has NATURAL JOIN Project) AS project_info NATURAL JOIN Joins WHERE projectID='$row[projectID]' GROUP BY projectID";
@@ -116,7 +119,12 @@
 
        $participant_fill_percentage = $curr_participants / $row["max_participants"] * 100;
         echo "
-        <form style='min-width: 60%; max-width: 60%; padding-top: 20px; padding-bottom: 20px;' action='../php/user/follow_project.php' method='post'>
+        <form style='min-width: 60%; max-width: 60%; padding-top: 20px; padding-bottom: 20px;' action='../php/user/follow_project.php' method='post'
+          ";
+          if($participant_fill_percentage == 100){
+            echo "class='project-full'";
+          }
+          echo "  >
           <input style='display: none;' name='projectID' value='". $row['projectID'] ."'>
           <div class='card' >
             <div class='card-body'>
@@ -167,11 +175,12 @@
 
     if(mysqli_num_rows($not_prefered_projects_result) > 0){
       echo "<div style='width: 100%; padding-top: 20px; padding-bottom: 20px;' class='d-flex justify-content-center'>
-              <h3>Other projects you might like</h3>
+              <h3 id='other-projects-title' >Other projects you might like</h3>
+              
             </div>";
-
+      $other_project_count = 0;
       while($row = mysqli_fetch_array($not_prefered_projects_result)) {
-
+        $other_project_count += 1;
         $curr_participants = $row["curr_participant_count"];
 
         $project_membership_query = "SELECT * FROM Joins WHERE userID = '$_SESSION[userID]' AND projectID = '$row[projectID]'";
@@ -186,7 +195,11 @@
 
         $participant_fill_percentage = $curr_participants / $row["max_participants"] * 100;
         echo "
-        <form style='min-width: 60%; max-width: 60%; padding-top: 20px; padding-bottom: 20px;' action='../php/user/follow_project.php' method='post'>
+        <form style='min-width: 60%; max-width: 60%; padding-top: 20px; padding-bottom: 20px;' action='../php/user/follow_project.php' method='post'";
+          if($participant_fill_percentage == 100){
+            echo "class='other-project-full'";
+          }
+          echo "  >
           <input style='display: none;' name='projectID' value='". $row['projectID'] ."'>
           <div class='card' >
             <div class='card-body'>
@@ -226,6 +239,9 @@
           </div>
         </form>";
       }
+      echo "<div id='other-projects-count' hidden>". $other_project_count ."</div>";
+      echo "<div id='other-projects-hidden-count' hidden>0</div>";
+      
     }
   ?>
 
@@ -234,40 +250,53 @@
   </div>
 
   <script>
-    var clickHandler = () => {
-      console.log("clicked")
-    }
+    var hideFullProjectsHandler = () => {
+      console.log("clicked");
+      var fullPreferedProjects = document.getElementsByClassName("project-full");
+      var fullOtherProjects = document.getElementsByClassName("other-project-full");
+      
+      var otherProjectsCount = document.getElementById("other-projects-count");
+      var otherProjectsHiddenCount = document.getElementById("other-projects-hidden-count");
 
-    removeButtonHandler = (element) => {
-
-      element.parentElement.style.display = 'none';
-      element.parentElement.submit();
-    }
-
-
-    var toggleNewProjectForm = () =>{
-      var newProjectForm = document.getElementById("new-project-form-container");
-      if (newProjectForm.style.display === "none"){
-        newProjectForm.style.display = "block";
+      var toggleFullProjectsBtn = document.getElementById("toggleFullProjectsBtn");
+      if (toggleFullProjectsBtn.textContent == "Hide full projects"){
+        hideProjects(fullPreferedProjects, fullOtherProjects);
+        toggleFullProjectsBtn.textContent = "Show full projects";
+        otherProjectsHiddenCount.textContent = parseInt(otherProjectsHiddenCount.textContent) + fullOtherProjects.length;
       } else{
-        newProjectForm.style.display = "none";
-        setProjectFormErrorMsg("")
-
+        showProjects(fullPreferedProjects, fullOtherProjects);
+        toggleFullProjectsBtn.textContent = "Hide full projects";
+        otherProjectsHiddenCount.textContent = parseInt(otherProjectsHiddenCount.textContent) - fullOtherProjects.length;
+      }
+      if (otherProjectsCount.textContent == otherProjectsHiddenCount.textContent){
+        var otherTitle = document.getElementById("other-projects-title");
+        otherTitle.style.display = "none";
+      } else if (otherProjectsCount.textContent > otherProjectsHiddenCount.textContent && parseInt(otherProjectsCount.textContent) > 0){
+        var otherTitle = document.getElementById("other-projects-title");
+        otherTitle.style.display = "block";
       }
     }
 
-    var setProjectFormErrorMsg = (msg) =>{
-      var msgDiv = document.getElementById("new-project-form-error-msg");
-      msgDiv.textContent = msg;
+    var hideProjects = (fullPreferedProjects, fullOtherProjects) =>{
+      for (var i = 0; i < fullPreferedProjects.length; i ++){
+        // console.log(fullPreferedProjects[i])
+        fullPreferedProjects[i].style.display = "none";
+      }
+      for (var i = 0; i < fullOtherProjects.length; i ++){
+        // console.log(fullPreferedProjects[i])
+        fullOtherProjects[i].style.display = "none";
+      }
+
     }
 
-    var checkProjectName = () =>{
-      var projectName = document.getElementById("new_project_name");
-      if (tripName.value.length === 0){
-        setProjectFormErrorMsg("Project name cannot be empty.")
-        return false
-      } else{
-        return true;
+    var showProjects = (fullPreferedProjects, fullOtherProjects) =>{
+      for (var i = 0; i < fullPreferedProjects.length; i ++){
+        // console.log(fullPreferedProjects[i])
+        fullPreferedProjects[i].style.display = "block";
+      }
+      for (var i = 0; i < fullOtherProjects.length; i ++){
+        // console.log(fullPreferedProjects[i])
+        fullOtherProjects[i].style.display = "block";
       }
     }
 
