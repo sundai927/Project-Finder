@@ -172,15 +172,7 @@
 
       while($row = mysqli_fetch_array($not_prefered_projects_result)) {
 
-        $participant_count_sql = "SELECT COUNT(projectID) AS member_count, projectID FROM (SELECT * FROM Has NATURAL JOIN Project) AS project_info NATURAL JOIN Joins WHERE projectID='$row[projectID]' GROUP BY projectID";
-        $count_result = mysqli_query($con, $participant_count_sql);
-        if (mysqli_num_rows($count_result) == 0) { 
-          $curr_participants = 0;
-        } else { 
-        while($count_row = mysqli_fetch_array($count_result)) {
-          $curr_participants = $count_row["member_count"];
-        }
-        }
+        $curr_participants = $row["curr_participant_count"];
 
         $project_membership_query = "SELECT * FROM Joins WHERE userID = '$_SESSION[userID]' AND projectID = '$row[projectID]'";
         $project_membership_result = mysqli_query($con, $project_membership_query);
