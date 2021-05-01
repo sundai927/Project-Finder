@@ -1,5 +1,6 @@
 body {
     background-color: #f3f7fe;
+    text-align: center;
 }
 
 .container{
@@ -12,3 +13,4 @@ body {
     align-items: center;
     flex-wrap: wrap;
 }
+

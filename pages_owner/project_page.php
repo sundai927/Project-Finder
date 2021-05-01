@@ -45,6 +45,7 @@
         <ul class="navbar-nav ml-auto mr-auto">
           <li class="nav-item active">
             <a class="nav-link" href="#">My Projects<span class="sr-only">(current)</span></a>
+      
           </li>
         </ul>
       <div class="btn-group">
@@ -97,20 +98,67 @@
         mysqli_connect_error());
         return null;
       }
-      
-      echo "<h3>Edit Project</h3>";
-      echo "Project name:" . $_POST["project_name"];
-      echo "</br>";
-      echo "Project Description:" . $_POST["project_description"];
-      echo "</br>";
+
       echo "<form>
       <input type='button' class='btn btn-primary' value='Back to Projects Page' onclick='history.back()'>  
       </form>";
+      
+      echo "<table class='table'>
+      <thead>
+          <tr>
+              <th scope='col'>Project Name</th>
+              <th scope='col'>Project Description</th>
+              <th scope='col'>Project Category</th>
+              <th scope='col'></th>
+          </tr>
+      </thead>
+      <tbody>";
+
+    echo "<tr>
+    <th scope='row'><div contenteditable id='edit_name' onblur='saveInput()'>" . $_POST["project_name"] . "</div></th>
+    <td><div contenteditable id='edit_description' onblur='saveInput()'>" . $_POST["project_description"] . "</div></td>
+    <td><div>" . $_POST["category_name"] . "</div></td>";
+    
+    echo "<p hidden id='projectID'>" . $_POST["project_id"] . "</p>";
+
+    $categories = $con->query("SELECT category_name FROM Category");
+    
 
       
-      mysqli_close($con);
+      
     ?>
+
+    <select name="categories">
+      <?php
+      while ($rows = $categories->fetch_assoc()) {
+        $cat_name = $rows['category_name'];
+        echo "<option value='$cat_name'>$cat_name</option>";
+      }
+      ?>
+    </select>
   </div>
+
+  <!-- Close the database connection -->
+  <?php
+    mysqli_close($con);
+    ?>
+
+  <script>
+    function saveInput() { // Save changes to project name and/or description
+      var xr = new XMLHttpRequest();
+      var url = "saveUserInput.php";
+      
+      var nameInput = document.getElementById("edit_name").innerHTML;
+      var descriptionInput = document.getElementById("edit_description").innerHTML;
+      var projectID = document.getElementById("projectID").innerHTML;
+      
+      var params = "newName=" + nameInput + "&projectID=" + projectID + "&newDescription=" + descriptionInput;
+    
+      xr.open("POST", url, true);
+      xr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xr.send(params);
+    }
+  </script>
 
   
 

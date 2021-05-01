@@ -41,6 +41,7 @@
             <a class="nav-link" href="#">My Projects <span class="sr-only">(current)</span></a>
           </li>
         </ul>
+        <a class="nav-link" href="#">Create New Project <span class="sr-only">(current)</span></a>
       <div class="btn-group">
         <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           My Profile
@@ -64,8 +65,8 @@
     </nav>
 </header>
 
+<h3>My Projects</h3>
   <div class="container">
-  <h3>My Projects</h3>
     
     <?php
       require_once('../php/library.php');
@@ -77,15 +78,15 @@
         return null;
       }
 
-      $sql = "SELECT * FROM Project NATURAL JOIN Proposes
+      $sql = "SELECT * FROM Project NATURAL JOIN Proposes NATURAL JOIN Has
               WHERE ownerID= '$_SESSION[ownerID]'";
       $result = mysqli_query($con,$sql);
       // Print the data from the table in a table
       echo "<table class='table'>
                 <thead>
                     <tr>
-                        <th scope='col'>Project_Name</th>
-                        <th scope='col'>Project_Description</th>
+                        <th scope='col'>Project Name</th>
+                        <th scope='col'>Project Description</th>
                         <th scope='col'></th>
                     </tr>
                 </thead>
@@ -100,8 +101,9 @@
                 <form action='./project_page.php', method='post'>
                     <input type='text' name='project_name' value='". $row['project_name'] ."' style='display: none;'>
                     <input type='text' name='project_description' value='". $row['project_description'] ."' style='display: none;'>
-                    
-                    <button type='submit' class='btn btn-primary'>More Info</button>
+                    <input type='text' name='category_name' value='". $row['category_name'] ."' style='display: none;'>
+                    <input type='text' name='project_id' value='". $row['projectID'] ."' style='display: none;'>
+                    <button type='submit' class='btn btn-primary'>Edit Project</button>
                 </form>
             </td>
         ";
@@ -117,6 +119,8 @@
       
 
   </div>
+
+  
 
   
 
