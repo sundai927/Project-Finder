@@ -29,6 +29,12 @@
         $follow_sql = "INSERT INTO Joins (userID, projectID) VALUES ('$_SESSION[userID]', '$_POST[projectID]')";;
         $follow_result = mysqli_query($con, $follow_sql);
       }
-      header("Location: ../../pages_user/main_feed.php");
+      if (substr($_SERVER['HTTP_REFERER'], -13) == "main_feed.php"){
+        header("Location: ../../pages_user/main_feed.php");
+      } else if (substr($_SERVER['HTTP_REFERER'], -20) == "my_projects_page.php"){
+        header("Location: ../../pages_user/my_projects_page.php");
+      }
+
+
     mysqli_close($con);   
 ?>
