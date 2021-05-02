@@ -41,7 +41,7 @@
             <a class="nav-link" href="#">Main Feed <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-          <a class="nav-link" href="#">My Followed Projects <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="./my_projects_page.php">My Followed Projects <span class="sr-only">(current)</span></a>
 
           </li>
 
