@@ -84,18 +84,81 @@
     // Form the SQL query (a SELECT query)
     $sql="SELECT * 
     FROM 
-      (SELECT * FROM Project NATURAL JOIN Joins) AS joined
+      (SELECT * FROM Project NATURAL JOIN Joins NATURAL JOIN Has) AS joined
     WHERE userID = '$_SESSION[userID]'";
 
 
     $result = mysqli_query($con, $sql);
     echo "<div style='width: 100%; flex-direction: column; align-items:center;' class='d-flex'>
-            <h3>My Projects</h3>
+            <h3>My Followed Projects</h3>
             </div>";
     while($row = mysqli_fetch_array($result)){
-    	echo $row['projectID'];
-	echo $row['userID'];
-	echo "\r\n";
+	$participant_count_sql = "SELECT COUNT(projectID) AS member_count, projectID FROM (SELECT * FROM Has NATURAL JOIN Project) AS project_info NATURAL JOIN Joins WHERE projectID='$row[projectID]' GROUP BY projectID";
+        $count_result = mysqli_query($con, $participant_count_sql);
+        if (mysqli_num_rows($count_result) == 0) { 
+          $curr_participants = 0;
+       } else { 
+        while($count_row = mysqli_fetch_array($count_result)) {
+          $curr_participants = $count_row["member_count"];
+        }
+       }
+
+       $project_membership_query = "SELECT * FROM Joins WHERE userID = '$_SESSION[userID]' AND projectID = '$row[projectID]'";
+       $project_membership_result = mysqli_query($con, $project_membership_query);
+       if(mysqli_num_rows($project_membership_result) == 0){
+        $in_project = false;
+
+       } else{
+         $in_project = true;
+
+       }
+
+       $participant_fill_percentage = $curr_participants / $row["max_participants"] * 100;
+        echo "
+        <form style='min-width: 60%; max-width: 60%; padding-top: 20px; padding-bottom: 20px;' action='../php/user/follow_project.php' method='post'
+          ";
+          if($participant_fill_percentage == 100){
+            echo "class='project-full'";
+          }
+          echo "  >
+          <input style='display: none;' name='projectID' value='". $row['projectID'] ."'>
+          <div class='card' >
+            <div class='card-body'>
+              <div style='display:flex; justify-content:space-between; align-items: center;'>
+                <h5 class='card-title'>". $row['project_name'] ."</h5>";
+                if($in_project){
+                  echo "<button type='submit' class='btn' style='background-color: #FF2C55; color: white;'>Unfollow</button>
+                  <input name='formAction' value='unfollow' hidden>";      
+                } else if ($participant_fill_percentage == 100){
+                  echo "<button type='submit' class='btn btn-secondary' disabled>Project Full</button>";
+                        
+                } else{
+                  echo "<button type='submit' class='btn btn-primary' >Follow</button>
+                        <input name='formAction' value='follow' hidden>";
+                }
+	echo "</div>
+              <h6 class='card-subtitle mb-2 text-muted'>". $row['category_name'] ."</h6>
+              <div class='card-text'>". $row['project_description'] ."</div>
+              <div class='project-capacity' style='padding-top: 10px; padding-bottom: 10px;'>
+                <div style='display: flex; justify-content: space-between; align-items: center;'>
+                  <div>Current participants:</div>
+                  <div class='progress' style='width: 70%'>";
+                  if($curr_participants > 0){
+                    echo "<div class='progress-bar' role='progressbar' style='width: ". $participant_fill_percentage ."%;' aria-valuenow='". $curr_participants ."' aria-valuemin='0' aria-valuemax='10'>". $curr_participants ."</div>";
+
+                  } else{
+                    echo "<div class='progress-bar' role='progressbar' style='width: 5%;' aria-valuenow='". $curr_participants ."' aria-valuemin='0' aria-valuemax='10'>". 0 ."</div>";
+                  }
+
+            echo "</div>
+                </div>
+                
+              </div>
+              <div style='font-weight: bold;'>Max participants: ". $row['max_participants'] ."</div>
+      
+            </div>
+          </div>
+        </form>";
     }
   ?>
 
@@ -103,58 +166,6 @@
 
   </div>
 
-  <script>
-    var hideFullProjectsHandler = () => {
-      console.log("clicked");
-      var fullPreferedProjects = document.getElementsByClassName("project-full");
-      var fullOtherProjects = document.getElementsByClassName("other-project-full");
-      
-      var otherProjectsCount = document.getElementById("other-projects-count");
-      var otherProjectsHiddenCount = document.getElementById("other-projects-hidden-count");
-
-      var toggleFullProjectsBtn = document.getElementById("toggleFullProjectsBtn");
-      if (toggleFullProjectsBtn.textContent == "Hide full projects"){
-        hideProjects(fullPreferedProjects, fullOtherProjects);
-        toggleFullProjectsBtn.textContent = "Show full projects";
-        otherProjectsHiddenCount.textContent = parseInt(otherProjectsHiddenCount.textContent) + fullOtherProjects.length;
-      } else{
-        showProjects(fullPreferedProjects, fullOtherProjects);
-        toggleFullProjectsBtn.textContent = "Hide full projects";
-        otherProjectsHiddenCount.textContent = parseInt(otherProjectsHiddenCount.textContent) - fullOtherProjects.length;
-      }
-      if (otherProjectsCount.textContent == otherProjectsHiddenCount.textContent){
-        var otherTitle = document.getElementById("other-projects-title");
-        otherTitle.style.display = "none";
-      } else if (otherProjectsCount.textContent > otherProjectsHiddenCount.textContent && parseInt(otherProjectsCount.textContent) > 0){
-        var otherTitle = document.getElementById("other-projects-title");
-        otherTitle.style.display = "block";
-      }
-    }
-
-    var hideProjects = (fullPreferedProjects, fullOtherProjects) =>{
-      for (var i = 0; i < fullPreferedProjects.length; i ++){
-        // console.log(fullPreferedProjects[i])
-        fullPreferedProjects[i].style.display = "none";
-      }
-      for (var i = 0; i < fullOtherProjects.length; i ++){
-        // console.log(fullPreferedProjects[i])
-        fullOtherProjects[i].style.display = "none";
-      }
-
-    }
-
-    var showProjects = (fullPreferedProjects, fullOtherProjects) =>{
-      for (var i = 0; i < fullPreferedProjects.length; i ++){
-        // console.log(fullPreferedProjects[i])
-        fullPreferedProjects[i].style.display = "block";
-      }
-      for (var i = 0; i < fullOtherProjects.length; i ++){
-        // console.log(fullPreferedProjects[i])
-        fullOtherProjects[i].style.display = "block";
-      }
-    }
-
-  </script>
 
   <!-- CDN for JS bootstrap -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
