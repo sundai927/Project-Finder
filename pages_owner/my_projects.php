@@ -41,7 +41,7 @@
             <a class="nav-link" href="#">My Projects <span class="sr-only">(current)</span></a>
           </li>
         </ul>
-        <a class="nav-link" href="#">Create New Project <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="create_page.php">Create New Project <span class="sr-only">(current)</span></a>
       <div class="btn-group">
         <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           My Profile

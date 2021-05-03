@@ -142,7 +142,7 @@
     <button type='submit' class='btn btn-primary'>Delete Project</button> 
       </form></td>
       <td>
-      <form action = "./blacklist.php", method="post">
+      <form action = "./blacklist_page.php", method="post">
       <input type='text' name='project_id' value=<?php print_r($_POST["project_id"]); ?>  style='display: none;'>
       <button type='submit' class='btn btn-primary'>Blacklisted Users</button>
       </form>
