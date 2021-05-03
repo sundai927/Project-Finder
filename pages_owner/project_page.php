@@ -126,7 +126,7 @@
       
       
     ?>
-    
+    <!-- Table for owner project -->
     <tr>
     <th scope='row'><div contenteditable id='edit_name' onblur='saveInput()'><?php print_r($_POST["project_name"]); ?> </div></th>
     <td><div contenteditable id='edit_description' onblur='saveInput()'><?php print_r($_POST["project_description"]); ?> </div></td>
@@ -136,10 +136,25 @@
         if ($cat_name != $_POST["category_name"])
           echo "<option value='$cat_name'>$cat_name</option>";
         }
-    ?></select> </div></td>
+    ?></select> </div>
+    </td><td><form action='./delete.php', method='post'>
+    <input type='text' name='project_id' value= <?php print_r($_POST["project_id"]); ?>   style='display: none;'>
+    <button type='submit' class='btn btn-primary'>Delete Project</button> 
+      </form></td>
+      <td>
+      <form action = "./blacklist.php", method="post">
+      <input type='text' name='project_id' value=<?php print_r($_POST["project_id"]); ?>  style='display: none;'>
+      <button type='submit' class='btn btn-primary'>Blacklisted Users</button>
+      </form>
+    </td></tr>
+
+    
+
 
     
   </div>
+
+  
 
   <!-- Close the database connection -->
   <?php
@@ -148,6 +163,7 @@
 
   <script>
     function saveInput() { // Save changes to project name and/or description
+      
       var xr = new XMLHttpRequest();
       var url = "saveUserInput.php";
       
@@ -163,6 +179,10 @@
       xr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       xr.send(params);
     }
+
+ 
+    
+
   </script>
 
   
