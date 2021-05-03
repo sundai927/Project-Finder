@@ -78,8 +78,10 @@
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
         }
 
+        $id = $_POST['project_id'];
+
         //list out users
-        $result = mysqli_query($con,"SELECT * FROM Joins WHERE projectID = 'ABCD1234'");
+        $result = mysqli_query($con,"SELECT * FROM Joins WHERE projectID = '".$id."'");
 
         echo "<h3>Current Available Users</h3>";
         echo "<table border='1' class='usertable' >
@@ -104,7 +106,7 @@
         <button  type='submit' class='btn btn-primary' onclick='location.href='./blacklist_page.php';'>Bye</button>
          </form>";
 
-         $result2 = mysqli_query($con,"SELECT * FROM Blacklist WHERE projectID = 'ABCD1234'");
+         $result2 = mysqli_query($con,"SELECT * FROM Blacklist WHERE projectID = '".$id."'");
         
         echo "<h3>Current Blacklisted Users</h3>";
         echo "<table border='1' class='bltable' >
@@ -129,13 +131,13 @@
         <button  type='submit' class='btn btn-primary' onclick='location.href='./blacklist_page.php';'>Comeback</button>
          </form>";
 
-        if (!mysqli_query($con,$result)) {
-            die('Error: ' . mysqli_error($con));
-        }  
+      //   if (!mysqli_query($con,$result)) {
+      //       die('Error: ' . mysqli_error($con));
+      //   }  
 
-        if (!mysqli_query($con,$result2)) {
-          die('Error: ' . mysqli_error($con));
-      }  
+      //   if (!mysqli_query($con,$result2)) {
+      //     die('Error: ' . mysqli_error($con));
+      // }  
 
         
 
