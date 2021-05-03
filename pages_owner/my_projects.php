@@ -40,9 +40,9 @@
           <li class="nav-item active">
             <a class="nav-link" href="#">My Projects <span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item active">
+          <!-- <li class="nav-item active">
             <a class="nav-link" href="./create_page.php">Create New Projects <span class="sr-only">(current)</span></a>
-          </li>
+          </li> -->
         </ul>
         <a class="nav-link" href="create_page.php">Create New Project <span class="sr-only">(current)</span></a>
       <div class="btn-group">

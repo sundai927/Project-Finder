@@ -36,6 +36,9 @@ VALUES
    die('Error: ' . mysqli_error($con));
 }  
 
+header("location:/cs4750_project/pages_owner/my_projects.php"); // Redirects you to my_projects page
+exit;
+
 
  
 mysqli_close($con);

@@ -40,9 +40,9 @@
           <li class="nav-item active">
             <a class="nav-link" href="#">My Projects <span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item active">
+          <!-- <li class="nav-item active">
             <a class="nav-link" href="./createpj_page.php">Create New Projects  <span class="sr-only">(current)</span> </a>
-          </li>
+          </li> -->
         </ul>
       <div class="btn-group">
         <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
