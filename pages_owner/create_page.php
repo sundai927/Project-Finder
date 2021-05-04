@@ -113,7 +113,7 @@
             $result = mysqli_query($con, $sql);
             print_r($result);
             while($row = mysqli_fetch_array($result)) {
-              echo "<option value=". $row["category_name"] .">". $row["category_name"] .": ". $row["cat_description"] ."</option>";
+              echo "<option value='". $row["category_name"] ."'>". $row["category_name"] .": ". $row["cat_description"] ."</option>";
             }
             ?>
             </select>

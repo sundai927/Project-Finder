@@ -34,6 +34,7 @@ $insert_proposes->bind_param("ss", $id, $_SESSION["ownerID"]);
 $insert_proposes->execute();
 $insert_proposes->close();
 
+// echo $_POST["category"];
 $insert_has= $con->prepare("INSERT INTO Has (projectID, category_name) VALUES (?, ?)");
 $insert_has->bind_param("ss", $id, $_POST["category"]);
 $insert_has->execute();
@@ -56,7 +57,7 @@ $insert_has->close();
 //    die('Error: ' . mysqli_error($con));
 // }  
 
-header("location:/cs4750_project/pages_owner/my_projects.php"); // Redirects you to my_projects page
+header("Location: ../../pages_owner/my_projects.php"); // Redirects you to my_projects page
 exit;
 
 
