@@ -93,7 +93,7 @@
   <div class="container" style="padding: 20px;">
     <!-- This gets the DB credentials from the PHP folder and connects to phpMyAdmin  -->
     <?php
-      require_once('../php/library.php');
+      require_once('../php/owner_user.php');
       $con = new mysqli($SERVER, $USERNAME, $PASSWORD, $DATABASE);
       // Check connection
       if (mysqli_connect_errno()) {

@@ -7,7 +7,7 @@
      ?>
 
 <?php
- include_once("../library.php"); // To connect to the database
+ include_once("../owner_user.php"); // To connect to the database
 
  $con = new mysqli($SERVER, $USERNAME, $PASSWORD, $DATABASE);
  // Check connection

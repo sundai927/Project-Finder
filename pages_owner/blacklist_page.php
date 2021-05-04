@@ -71,7 +71,7 @@
 
 <div class="container" style="padding: 50px; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%;">
     <?php
-        include_once("../php/library.php"); // To connect to the database
+        include_once("../php/owner_user.php"); // To connect to the database
 
         $con = new mysqli($SERVER, $USERNAME, $PASSWORD, $DATABASE);
         // Check connection
@@ -160,7 +160,7 @@
     ?>
 
      <?php
-      require_once('../php/library.php');
+      require_once('../php/owner_user.php');
       $con = new mysqli($SERVER, $USERNAME, $PASSWORD, $DATABASE);
       // Check connection
       if (mysqli_connect_errno()) {
