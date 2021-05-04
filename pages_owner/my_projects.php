@@ -67,9 +67,10 @@
       </div>
     </nav>
 </header>
-
-<h3>My Projects</h3>
-  <div class="container">
+<div style="padding-top: 50px;">
+  <h3>My Projects</h3>
+</div>
+  <div class="container" style="padding: 20px;">
     
     <?php
       require_once('../php/library.php');

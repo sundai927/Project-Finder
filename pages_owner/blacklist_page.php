@@ -38,12 +38,13 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">My Projects <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="./my_projects.php">My Projects <span class="sr-only">(current)</span></a>
           </li>
           <!-- <li class="nav-item active">
-            <a class="nav-link" href="./createpj_page.php">Create New Projects  <span class="sr-only">(current)</span> </a>
+            <a class="nav-link" href="./create_page.php">Create New Projects <span class="sr-only">(current)</span></a>
           </li> -->
         </ul>
+        <a class="nav-link" href="create_page.php">Create New Project <span class="sr-only">(current)</span></a>
       <div class="btn-group">
         <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           My Profile
@@ -68,7 +69,7 @@
 </header>
 
 
-<div class="container">
+<div class="container" style="padding: 50px; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%;">
     <?php
         include_once("../php/library.php"); // To connect to the database
 
@@ -82,55 +83,68 @@
 
         //list out users
         $result = mysqli_query($con,"SELECT * FROM Joins WHERE projectID = '".$id."'");
-
-        echo "<h3>Current Available Users</h3>";
+        echo "<div style='padding-bottom: 20px; display: flex; flex-direction: column; justify-content: center;'>";
+        echo "<h3>Current Available Members</h3>";
         echo "<table border='1' class='usertable' >
         <tr>
         <th>User ID</th>
-        <th>Project ID</th>
         </tr>";
 
         while($row = mysqli_fetch_array($result))
         {
         echo "<tr>";
         echo "<td>" . $row['userID'] . "</td>";
-        echo "<td>" . $row['projectID'] . "</td>";
+        // echo "<td>" . $row['projectID'] . "</td>";
         echo "</tr>";
+        $project_id = $row['projectID'];
         }
         echo "</table>";
     
-        echo "<form action='../php/owner/blacklist.php' method='post' class='blacklistinput'> 
+        echo "<form action='../php/owner/blacklist.php' method='post' class='blacklistinput' style='display: flex; flex-direction: column; justify-content:center;'> 
         <input type='text' name='userID' placeholder='Enter wanted user's ID to blacklist'>
-        <input type='text' name='pjID' placeholder='Enter pj's ID to blacklist'>
+        <input hidden type='text' name='pjID' value='". $project_id ."'>
         <br/>
-        <button  type='submit' class='btn btn-primary' onclick='location.href='./blacklist_page.php';'>Bye</button>
+        <button  type='submit' class='btn btn-primary' onclick='location.href='./blacklist_page.php';'>Blacklist User</button>
          </form>";
+         echo "<div id='add-blacklist-error-msg' style='text-align: center; color: red;'>";
+         if (isset($_SESSION["addBlacklistError"])){
+           echo $_SESSION["addBlacklistError"];
+         }
+         echo "</div>";        
+         echo "</div>";
+
 
          $result2 = mysqli_query($con,"SELECT * FROM Blacklist WHERE projectID = '".$id."'");
-        
-        echo "<h3>Current Blacklisted Users</h3>";
+        echo "<div style='padding-top: 20px; padding-bottom: 20px; display: flex; flex-direction: column; justify-content: center;'>";
+        echo "<h3>Current Blacklisted Members</h3>";
         echo "<table border='1' class='bltable' >
         <tr>
         <th>User ID</th>
-        <th>Project ID</th>
         </tr>";
 
         while($row2 = mysqli_fetch_array($result2))
         {
         echo "<tr>";
         echo "<td>" . $row2['userID'] . "</td>";
-        echo "<td>" . $row2['projectID'] . "</td>";
+        // echo "<td>" . $row2['projectID'] . "</td>";
         echo "</tr>";
         }
         echo "</table>";
 
-        echo "<form action='../php/owner/blacklistback.php' method='post' class='blacklistinput'> 
+        echo "<form action='../php/owner/blacklistback.php' method='post' class='blacklistinput' style='display: flex; flex-direction: column; justify-content:center;'> 
         <input type='text' name='userID' placeholder='Enter wanted user's ID to blacklist'>
-        <input type='text' name='pjID' placeholder='Enter pj's ID to blacklist'>
+        <input hidden type='text' name='pjID' value='". $project_id ."'>
         <br/>
-        <button  type='submit' class='btn btn-primary' onclick='location.href='./blacklist_page.php';'>Comeback</button>
+        <button  type='submit' class='btn btn-primary' onclick='location.href='./blacklist_page.php';'>Remove user from Blacklist</button>
          </form>";
+         echo "<div id='remove-blacklist-error-msg' style='text-align: center; color: red;'>";
+         if (isset($_SESSION["removeBlacklistError"])){
+          echo $_SESSION["removeBlacklistError"];
+        }
+         echo "</div>";
 
+         echo "</div>";
+         
       //   if (!mysqli_query($con,$result)) {
       //       die('Error: ' . mysqli_error($con));
       //   }  
@@ -158,7 +172,6 @@
       mysqli_close($con);
     ?>
     
-    <h3> header3</h3>
     
 
 
