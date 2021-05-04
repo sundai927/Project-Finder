@@ -166,7 +166,7 @@
 
   <script>
     function saveInput() { // Save changes to project name and/or description
-      
+      console.log("saving");
       var xr = new XMLHttpRequest();
       var url = "saveUserInput.php";
       
@@ -177,7 +177,7 @@
       var selectedCategory = categoryInput.options[categoryInput.selectedIndex].text;
       
       var params = "newName=" + nameInput + "&projectID=" + projectID + "&newDescription=" + descriptionInput + "&newCategory=" + selectedCategory;
-    
+      console.log(params)
       xr.open("POST", url, true);
       xr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       xr.send(params);
