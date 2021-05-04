@@ -80,70 +80,85 @@
         }
 
         $id = $_POST['project_id'];
+        $project_id = $_POST['project_id'];
 
         //list out users
         $result = mysqli_query($con,"SELECT * FROM Joins WHERE projectID = '".$id."'");
-        echo "<div style='padding-bottom: 20px; display: flex; flex-direction: column; justify-content: center;'>";
-        echo "<h3>Current Available Members</h3>";
-        echo "<table border='1' class='usertable' >
-        <tr>
-        <th>User ID</th>
-        </tr>";
 
-        while($row = mysqli_fetch_array($result))
-        {
-        echo "<tr>";
-        echo "<td>" . $row['userID'] . "</td>";
-        // echo "<td>" . $row['projectID'] . "</td>";
-        echo "</tr>";
-        $project_id = $row['projectID'];
+        if (mysqli_num_rows($result)==0){
+          $has_users = false;
+        } else{
+          $has_users = true;
+          echo "<div style='padding-bottom: 20px; display: flex; flex-direction: column; justify-content: center;'>";
+          echo "<h3>Current Available Members</h3>";
+          echo "<table border='1' class='usertable' >
+          <tr>
+          <th>User ID</th>
+          </tr>";
+  
+          while($row = mysqli_fetch_array($result))
+          {
+          echo "<tr>";
+          echo "<td>" . $row['userID'] . "</td>";
+          // echo "<td>" . $row['projectID'] . "</td>";
+          echo "</tr>";
+          $project_id = $row['projectID'];
+          }
+          echo "</table>";
+      
+          echo "<form action='../php/owner/blacklist.php' method='post' class='blacklistinput' style='display: flex; flex-direction: column; justify-content:center;'> 
+          <input type='text' name='userID' placeholder='Enter wanted user's ID to blacklist'>
+          <input hidden type='text' name='pjID' value='". $project_id ."'>
+          <br/>
+          <button  type='submit' class='btn btn-primary' onclick='location.href='./blacklist_page.php';'>Blacklist User</button>
+           </form>";
+           echo "<div id='add-blacklist-error-msg' style='text-align: center; color: red;'>";
+           if (isset($_SESSION["addBlacklistError"])){
+             echo $_SESSION["addBlacklistError"];
+           }
+           echo "</div>";        
+           echo "</div>";
+
         }
-        echo "</table>";
-    
-        echo "<form action='../php/owner/blacklist.php' method='post' class='blacklistinput' style='display: flex; flex-direction: column; justify-content:center;'> 
-        <input type='text' name='userID' placeholder='Enter wanted user's ID to blacklist'>
-        <input hidden type='text' name='pjID' value='". $project_id ."'>
-        <br/>
-        <button  type='submit' class='btn btn-primary' onclick='location.href='./blacklist_page.php';'>Blacklist User</button>
-         </form>";
-         echo "<div id='add-blacklist-error-msg' style='text-align: center; color: red;'>";
-         if (isset($_SESSION["addBlacklistError"])){
-           echo $_SESSION["addBlacklistError"];
-         }
-         echo "</div>";        
-         echo "</div>";
+        // $result2 = mysqli_query($con,"SELECT * FROM Blacklist WHERE projectID = $id");
+        $result2 = mysqli_query($con,"SELECT * FROM Blacklist WHERE projectID = '".$id."'");
+        // print_r($result2);
+        if (mysqli_num_rows($result2)==0){
 
+          $has_blacklist = false;
+        } else{
+          $has_blacklist = true;
 
-         $result2 = mysqli_query($con,"SELECT * FROM Blacklist WHERE projectID = '".$id."'");
-        echo "<div style='padding-top: 20px; padding-bottom: 20px; display: flex; flex-direction: column; justify-content: center;'>";
-        echo "<h3>Current Blacklisted Members</h3>";
-        echo "<table border='1' class='bltable' >
-        <tr>
-        <th>User ID</th>
-        </tr>";
+          echo "<div style='padding-top: 20px; padding-bottom: 20px; display: flex; flex-direction: column; justify-content: center;'>";
+          echo "<h3>Current Blacklisted Members</h3>";
+          echo "<table border='1' class='bltable' >
+          <tr>
+          <th>User ID</th>
+          </tr>";
 
-        while($row2 = mysqli_fetch_array($result2))
-        {
-        echo "<tr>";
-        echo "<td>" . $row2['userID'] . "</td>";
-        // echo "<td>" . $row2['projectID'] . "</td>";
-        echo "</tr>";
+          while($row2 = mysqli_fetch_array($result2))
+          {
+          echo "<tr>";
+          echo "<td>" . $row2['userID'] . "</td>";
+          // echo "<td>" . $row2['projectID'] . "</td>";
+          echo "</tr>";
+          }
+          echo "</table>";
+
+          echo "<form action='../php/owner/blacklistback.php' method='post' class='blacklistinput' style='display: flex; flex-direction: column; justify-content:center;'> 
+          <input type='text' name='userID' placeholder='Enter wanted user's ID to blacklist'>
+          <input hidden type='text' name='pjID' value='". $project_id ."'>
+          <br/>
+          <button  type='submit' class='btn btn-primary' onclick='location.href='./blacklist_page.php';'>Remove user from Blacklist</button>
+          </form>";
+          echo "<div id='remove-blacklist-error-msg' style='text-align: center; color: red;'>";
+          if (isset($_SESSION["removeBlacklistError"])){
+            echo $_SESSION["removeBlacklistError"];
+          }
+          echo "</div>";
+
+          echo "</div>";
         }
-        echo "</table>";
-
-        echo "<form action='../php/owner/blacklistback.php' method='post' class='blacklistinput' style='display: flex; flex-direction: column; justify-content:center;'> 
-        <input type='text' name='userID' placeholder='Enter wanted user's ID to blacklist'>
-        <input hidden type='text' name='pjID' value='". $project_id ."'>
-        <br/>
-        <button  type='submit' class='btn btn-primary' onclick='location.href='./blacklist_page.php';'>Remove user from Blacklist</button>
-         </form>";
-         echo "<div id='remove-blacklist-error-msg' style='text-align: center; color: red;'>";
-         if (isset($_SESSION["removeBlacklistError"])){
-          echo $_SESSION["removeBlacklistError"];
-        }
-         echo "</div>";
-
-         echo "</div>";
          
       //   if (!mysqli_query($con,$result)) {
       //       die('Error: ' . mysqli_error($con));
@@ -153,7 +168,14 @@
       //     die('Error: ' . mysqli_error($con));
       // }  
 
-        
+        if(!$has_blacklist && !$has_users){
+          echo "<div>There are no members in your project and no one on the blacklist.</div>";
+        } else if($has_blacklist && !$has_users){
+          echo "<div>There are no other members in your project to blacklist.</div>";
+        } else if (!$has_blacklist && $has_users){
+          echo "<div>There are no members in your project currently on the blacklist.</div>";
+
+        }
 
         
         mysqli_close($con);
