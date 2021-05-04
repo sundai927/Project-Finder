@@ -79,25 +79,12 @@
         return null;
       }
       
-      mysqli_close($con);
     ?>
       
 
-      <div id="login-signup-panel" style="display: block">
-      <form id="login-signup-panel-form" onsubmit="return checkLoginCredentials()" action="../php/owner/create_project.php" method="post">
+      <form id="login-signup-panel-form" action="../php/owner/create_project.php" method="post" style="display: flex; align-items: center; flex-direction: column; padding: 50px;">
 
       <h3 id="login-signup-panel-title">Create Projects</h3>
-      <div class="signup-msg">
-            <?php 
-              if(isset($_SESSION['signup_success'])) {
-                if( $_SESSION["signup_success"]){
-                  echo "<div style='color: green'>" . "Sign up success! Please log in." . "</div>";
-                } else{
-                  echo "<div style='color: red'>" . $_SESSION['signup_error_message'] . "</div>";
-                }
-              }
-              ?>
-        </div>
 
         <div class="form-group">
           <label >Project Name</label>
@@ -109,16 +96,33 @@
           <label>Max participant</label>
           <input type="text" name="max" class="form-control"  placeholder="Maximum number">
         </div>
-       
+
         
         <div class="form-group" id="signup-name">
           <label >Project Description</label></br>
           <textarea name="pjtext" class="form-control"  style="width:400px; height:120px;" placeholder="Enter Project  Description"></textarea>
         </div>
 
+        <div class="form-group" >
+          <select name="category" style="width: 50%">
+            
+          
+            <?php
+            $sql="SELECT * FROM Category";
+            $result = mysqli_query($con, $sql);
+            print_r($result);
+            while($row = mysqli_fetch_array($result)) {
+              echo "<option value=". $row["category_name"] .">". $row["category_name"] .": ". $row["cat_description"] ."</option>";
+            }
+            ?>
+            </select>
+        </div>
+
         <div class="submit-button">
           <button id="login-button" type="submit" class="btn btn-primary" onclick="location.href='#';">Create</button>
         </div>
+
+
 
       </form>
       
@@ -129,7 +133,10 @@
   </div>
 
   </div>
+<?php
+      mysqli_close($con);
 
+?>
   <!-- CDN for JS bootstrap -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
