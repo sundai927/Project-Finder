@@ -44,6 +44,7 @@
           <a class="nav-link" href="./my_projects_page.php">My Followed Projects <span class="sr-only">(current)</span></a>
 
           </li>
+          
 
         </ul>
       <div class="btn-group">
