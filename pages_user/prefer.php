@@ -1,6 +1,6 @@
-
 <?php
- include_once(" ./php/library.php"); // To connect to the database
+session_start();
+ include_once("../php/library.php"); // To connect to the database
 
  $con = new mysqli($SERVER, $USERNAME, $PASSWORD, $DATABASE);
  // Check connection
@@ -11,41 +11,32 @@
  // Wants to get the specific category that needs to be prefered
 
  $sql="SELECT * FROM Category WHERE category_name='$_POST[category_name]'";
-
+ $result = mysqli_query($con,$sql);
  //$sql="SELECT * FROM User WHERE userID='$_POST[email]' AND password= SHA1('$_POST[password]')";
  
+ 
+ while($ans = mysqli_fetch_array($result)) {
+    echo "<div> Category: " . $ans['category_name'] . "</div>";
 
+    $change = "INSERT INTO Prefers (userID, category_name) VALUES ('$_SESSION[userID]', '$ans[category_name]')";
+
+    echo $change;
+    $result2 = mysqli_query($con,$change);
+
+ }
+
+ 
 
  if (!mysqli_query($con,$sql)) {
     die('Error: ' . mysqli_error($con));
  }  
 
  $result = mysqli_query($con,$sql);
- session_start();
 
- if (isset($_SESSION["signup_error_message"])){
-    unset($_SESSION["signup_error_message"]);
-}
 
-if (isset($_SESSION["signup_success"])){
-    unset($_SESSION["signup_success"]);
-}
-
-if (mysqli_num_rows($result) > 0){
-    $row = mysqli_fetch_array($result);
-    $_SESSION["userID"] = $row["userID"];
-    if (isset($_SESSION["login_error_message"])){
-        unset($_SESSION["login_error_message"]);
-    }
-
-    header("Location: ../../pages_user/main_feed.php");
-} else{
-
-    $_SESSION["login_error_message"] = "Incorrect username and password.";
-    header("Location: ../../pages_user/landing_page.php");
-
-}
-
+ 
 
 mysqli_close($con);
+
+header("Location: ./profile.php");
 ?>
