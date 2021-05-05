@@ -73,7 +73,6 @@
     </nav>
 </header>
 
-<div> Hello </div>
 <?php 
         //  This starts the user session. Allows you to access the $_SESSION object in PHP
         // I use the $_SESSION object to store things like userID/ownerID
