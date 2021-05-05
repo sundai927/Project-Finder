@@ -67,7 +67,7 @@
               
               ?>
           </div>
-          <a class="dropdown-item" href="#">My profile</a>
+          <a class="dropdown-item" href="./profile.php">My profile</a>
           <a class="dropdown-item"  href="./logout.php">Log out</a>
         </div>
       </div>
