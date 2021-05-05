@@ -64,7 +64,6 @@
               
               ?>
           </div>
-          <a class="dropdown-item" href="./main_feed.php">Main Feed</a>
           <a class="dropdown-item"  href="./logout.php">Log out</a>
         </div>
       </div>
