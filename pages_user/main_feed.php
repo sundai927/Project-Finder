@@ -86,7 +86,8 @@
     $sql="SELECT * 
     FROM 
       (SELECT * FROM Has NATURAL JOIN Project) AS project_info
-    WHERE project_info.category_name IN (SELECT category_name FROM Prefers WHERE userID = '$_SESSION[userID]');";
+    WHERE project_info.category_name IN (SELECT category_name FROM Prefers WHERE userID='$_SESSION[userID]')
+    AND project_info.projectID NOT IN (SELECT projectID FROM Blacklist NATURAL JOIN Project WHERE userID='$_SESSION[userID]')";
 
 
     $result = mysqli_query($con, $sql);
@@ -171,7 +172,8 @@
           FROM 
             (SELECT * FROM Has NATURAL JOIN Project) AS project_info
           WHERE project_info.category_name NOT IN (SELECT category_name FROM Prefers WHERE userID = '$_SESSION[userID]')
-          AND project_info.category_name NOT IN (SELECT category_name FROM Hates WHERE userID = '$_SESSION[userID]');";
+          AND project_info.category_name NOT IN (SELECT category_name FROM Hates WHERE userID = '$_SESSION[userID]')
+          AND project_info.projectID NOT IN (SELECT projectID FROM Blacklist NATURAL JOIN Project WHERE userID='$_SESSION[userID]')";
     $not_prefered_projects_result = mysqli_query($con, $not_prefered_projects_sql);
 
     if(mysqli_num_rows($not_prefered_projects_result) > 0){
