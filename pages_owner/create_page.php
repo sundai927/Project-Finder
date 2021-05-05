@@ -9,7 +9,7 @@
   <meta name="author" content="your name">
   <meta name="description" content="include some description about your page">
 
-  <title>My Projects</title>
+  <title>Create Projects</title>
 
   <!-- bootstrap -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
@@ -38,7 +38,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">My Projects <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="./my_projects.php">My Projects <span class="sr-only">(current)</span></a>
           </li>
           <!-- <li class="nav-item active">
             <a class="nav-link" href="./create_page.php">Create New Projects <span class="sr-only">(current)</span></a>
@@ -67,10 +67,8 @@
       </div>
     </nav>
 </header>
-<div style="padding-top: 50px;">
-  <h3>My Projects</h3>
-</div>
-  <div class="container" style="padding: 20px;">
+
+  <div class="container">
     
     <?php
       require_once('../php/owner_user.php');
@@ -81,59 +79,65 @@
         mysqli_connect_error());
         return null;
       }
-
-      $sql = "SELECT * FROM Project NATURAL JOIN Proposes NATURAL JOIN Has
-              WHERE ownerID= '$_SESSION[ownerID]'";
-      $result = mysqli_query($con,$sql);
-      // Print the data from the table in a table
-      echo "<table class='table'>
-                <thead>
-                    <tr>
-                        <th scope='col'>Project Name</th>
-                        <th scope='col'>Project Description</th>
-                        <th scope='col'>Project Category</th>
-                        <th scope='col'></th>
-                    </tr>
-                </thead>
-                <tbody>";
-       while($row = mysqli_fetch_array($result)) {
-          echo "<tr>
-          <th scope='row'>" . $row['project_name'] . "</th>
-          <td>" . $row['project_description'] . "</td>
-          <td>" . $row['category_name'] . "</td>";
-
-          echo "
-            <td>
-                <form action='./project_page.php', method='post'>
-                    <input type='text' name='project_name' value='". $row['project_name'] ."' style='display: none;'>
-                    <input type='text' name='project_description' value='". $row['project_description'] ."' style='display: none;'>
-                    <input type='text' name='category_name' value='". $row['category_name'] ."' style='display: none;'>
-                    <input type='text' name='project_id' value='". $row['projectID'] ."' style='display: none;'>
-                    <button type='submit' class='btn btn-primary'>Edit Project</button>
-                </form>
-            </td>
-        ";
-
-        echo "</tr>";
-       }
       
-      mysqli_close($con);
-
     ?>
       
 
-    
-      
-      
+      <form id="login-signup-panel-form" action="../php/owner/create_project.php" method="post" style="display: flex; align-items: center; flex-direction: column; padding: 50px;">
 
+      <h3 id="login-signup-panel-title">Create Projects</h3>
+
+        <div class="form-group">
+          <label >Project Name</label>
+          <input type="text" name="pjname" class="form-control"  
+            placeholder="Enter Project Name">
+        </div>
+       
+        <div class="form-group">
+          <label>Max participant</label>
+          <input type="text" name="max" class="form-control"  placeholder="Maximum number">
+        </div>
+
+        
+        <div class="form-group" id="signup-name">
+          <label >Project Description</label></br>
+          <textarea name="pjtext" class="form-control"  style="width:400px; height:120px;" placeholder="Enter Project  Description"></textarea>
+        </div>
+
+        <div class="form-group" >
+          <select name="category" style="width: 50%">
+            
+          
+            <?php
+            $sql="SELECT * FROM Category";
+            $result = mysqli_query($con, $sql);
+            print_r($result);
+            while($row = mysqli_fetch_array($result)) {
+              echo "<option value='". $row["category_name"] ."'>". $row["category_name"] .": ". $row["cat_description"] ."</option>";
+            }
+            ?>
+            </select>
+        </div>
+
+        <div class="submit-button">
+          <button id="login-button" type="submit" class="btn btn-primary" onclick="location.href='#';">Create</button>
+        </div>
+
+
+
+      </form>
       
+    </div>
+
+
 
   </div>
 
-  
+  </div>
+<?php
+      mysqli_close($con);
 
-  
-
+?>
   <!-- CDN for JS bootstrap -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
