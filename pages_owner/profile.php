@@ -113,6 +113,7 @@
         <label for=' New Password'>New Password:</label>
         <input type='text' id='nPass' name='nPass'><br><br>
         <input type='submit' value='Submit'>
+        </form>
         ";
         echo"</div>";
       // mysqli_close($con);

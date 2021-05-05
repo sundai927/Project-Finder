@@ -19,10 +19,8 @@
     integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
     <!-- This is how you include a style sheet in PHP -->
-  <style>
-    <?php 
-        include '../stylesheets/user/template.css'; 
-    ?>
+    <style>
+    <?php include '../stylesheets/user/profile.css'; ?>
   </style>
 
 </head>
@@ -87,7 +85,7 @@
       <!-- This is how you can get stuff from the DB and show it dynamically -->
       <!-- Gets all the  userIDs and names and displays them-->
       <!-- More info on bootstrap tables: https://getbootstrap.com/docs/4.0/content/tables/ -->
-    <?php
+      <?php
       require_once('../php/library.php');
       $con = new mysqli($SERVER, $USERNAME, $PASSWORD, $DATABASE);
       // Check connection
@@ -103,20 +101,21 @@
       // Print the data from the table in a table
 
       $row = mysqli_fetch_array($result);
+      echo"<div style='display: flex; justify-content: center; flex-direction: column; align-items: center; padding: 50px;'>";
+        echo "<div>Current Name: "  . $row['name'] .  "</div>";
 
-        echo "<div>Current Username: "  . $row['name'] .  "</div>";
-
-        echo "<form action='./noPref.php', method='post'>
-        <label for=' New Username'>New Username:</label>
+        echo "<form action='./change_user.php', method='post'>
+        <label for=' New Name'>New Name:</label>
         <input type='text' id='nName' name='nName'><br><br>
         ";
         echo "<form action='./password.php', method='post'>
         <label for=' New Password'>New Password:</label>
         <input type='text' id='nPass' name='nPass'><br><br>
         <input type='submit' value='Submit'>
+        </form>
         ";
-      // mysqli_close($con);
-?>
+        echo"</div>";
+      ?>
 
   <div class="container">
 
@@ -140,7 +139,7 @@
       $sql="SELECT category_name FROM Prefers WHERE userID='$_SESSION[userID]'";
       $result = mysqli_query($con,$sql);
       // Print the data from the table in a table
-      echo "<table class='table'>
+      echo "<table class='table' >
                 <thead>
                     <tr>
                         <th scope='col'>Category</th>
@@ -159,16 +158,18 @@
         // Make sure the button is of type submit.
         echo "
             <td>
+            <div style='display: flex; width: 50px; justify-content: space-around;'>
+
                 <form action='./noPref.php', method='post'>
-                    <input type='text' name='user_id' value='". $row['category_name'] ."' style='display: none;'>
+                    <input type='text' name='category_name' value='". $row['category_name'] ."' style='display: none;'>
                     
                     <button type='submit' class='btn btn-primary'>Remove</button>
                 </form>
                 <form action='./hate.php', method='post'>
-                    <input type='text' name='user_id' value='". $row['category_name'] ."' style='display: none;'>
+                    <input type='text' name='category_name' value='". $row['category_name'] ."' style='display: none;'>
                     
                     <button type='submit' class='btn btn-primary'>Dislike</button>
-                </form>
+                </form></div> 
             </td>
         ";
 
@@ -234,18 +235,22 @@
         // This is how to can bring information to another page. Use a form and hide the input elements.
         // Manually set the input elements like below.
         // Make sure the button is of type submit.
+        echo "<tr>
+        <th scope='row'>" . $row['category_name'] . "</th>
+        ";
         echo "
             <td>
-                <form action='./noPref.php', method='post'>
-                    <input type='text' name='user_id' value='". $row['category_name'] ."' style='display: none;'>
-                    
-                    <button type='submit' class='btn btn-primary'>Remove</button>
-                </form>
+           <div style='display: flex; width: 50px; justify-content: space-around;'>
+            <form action='./noPrefHate.php', method='post'>
+            <input type='text' name='category_name' value='". $row['category_name'] ."' style='display: none;'>
+            
+            <button type='submit' class='btn btn-primary'>Remove</button>
+        </form>
                 <form action='./prefer.php', method='post'>
-                    <input type='text' name='user_id' value='". $row['category_name'] ."' style='display: none;'>
+                    <input type='text' name='category_name' value='". $row['category_name'] ."' style='display: none;'>
                     
                     <button type='submit' class='btn btn-primary'>Prefer</button>
-                </form>
+                </form></div> 
             </td>
         ";
 
@@ -263,7 +268,7 @@
 
   <div class="container">
 
-  <div> Other Categories</div>
+  <div> No Preferences</div>
     <!-- This gets the DB credentials from the PHP folder and connects to phpMyAdmin  -->
 
       <!-- This is how you can get stuff from the DB and show it dynamically -->
@@ -280,8 +285,7 @@
       }
       // Form the SQL query (a SELECT query)
       //$sql="SELECT * FROM Prefers";
-      $sql="SELECT * FROM Category";
-
+      $sql="SELECT category_name FROM Category WHERE category_name NOT IN ((SELECT category_name FROM Prefers WHERE userID='$_SESSION[userID]') UNION (SELECT category_name FROM Hates WHERE userID='$_SESSION[userID]'))";
       $result = mysqli_query($con,$sql);
       // Print the data from the table in a table
       echo "<table class='table'>
@@ -302,16 +306,20 @@
         // Manually set the input elements like below.
         // Make sure the button is of type submit.
         echo "
-            <td>
-              <form action='./prefer.php', method='post'>
-                    <input type='text' name='user_id' value='". $row['category_name'] ."' style='display: none;'>
-                    <button type='submit' class='btn btn-primary'>Prefer</button>
-                </form>
-                <form action='./hate.php', method='post'>
-                <input type='text' name='user_id' value='". $row['category_name'] ."' style='display: none;'>
+          <td>
+          <div style='display: flex; width: 50px; justify-content: space-around;'>
+
+          <form action='./prefer.php', method='post'>
+            <input type='text' name='category_name' value='". $row['category_name'] ."' style='display: none;'>
+            
+            <button type='submit' class='btn btn-primary'>Prefer</button>
+          </form>
+            <form action='./hate.php', method='post'>
+                <input type='text' name='category_name' value='". $row['category_name'] ."' style='display: none;'>
+                
                 <button type='submit' class='btn btn-primary'>Dislike</button>
-            </form>
-            </td>
+            </form></div> 
+          </td>
         ";
         echo "</tr>";
       }

@@ -12,18 +12,18 @@
 
  if ($_POST["nPass"] == "" && !$_POST["nName"] == ""){
     // $sql="UPDATE Owner SET name='$_POST[nName]' WHERE ownerID='$_SESSION[ownerID]'";
-    $stmt = $con->prepare("UPDATE Owner SET name=? WHERE userID=?");
+    $stmt = $con->prepare("UPDATE User SET name=? WHERE userID=?");
     $stmt->bind_param("ss", $_POST["nName"], $_SESSION["userID"]);
 
 
 
  } else if($_POST["nName"] == "" && !$_POST["nPass"] == ""){
     // $sql="UPDATE Owner SET password=SHA1('$_POST[nPass]') WHERE ownerID='$_SESSION[ownerID]'";
-    $stmt = $con->prepare("UPDATE Owner SET password=? WHERE userID=?");
+    $stmt = $con->prepare("UPDATE User SET password=? WHERE userID=?");
     $stmt->bind_param("ss", SHA1($_POST["nPass"]), $_SESSION["userID"]);
  }else{
     // $sql="UPDATE Owner SET name='$_POST[nName]', password=SHA1('$_POST[nPass]') WHERE ownerID='$_SESSION[ownerID]'";
-    $stmt = $con->prepare("UPDATE Owner SET name=?, SET password=? WHERE userID=?");
+    $stmt = $con->prepare("UPDATE User SET name=?, SET password=? WHERE userID=?");
     $stmt->bind_param("sss", $_POST["nName"], SHA1($_POST["nPass"]), $_SESSION["userID"]);
 }
 

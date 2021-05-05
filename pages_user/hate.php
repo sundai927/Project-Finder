@@ -24,14 +24,14 @@ session_start();
     echo $change;
     $result2 = mysqli_query($con,$change);
 
-    $change2 = "SELECT * FROM Prefers (userID, category_name) VALUES ('$_SESSION[userID]', '$ans[category_name]')";
+    $change2 = "SELECT * FROM Prefers WHERE userID='$_SESSION[userID]' AND category_name='$ans[category_name]'";
     $run_change2 = mysqli_query($con,$change2);
 
     echo $change2;
     print_r($run_change2);
     
     if (mysqli_num_rows($run_change2)>0){
-        $change3 = "DELETE FROM Prefers WHERE userID = '$_SESSION[userID]' AND category_name = '$ans[category_name]'";
+        $change3 = "DELETE FROM Prefers WHERE userID='$_SESSION[userID]' AND category_name='$ans[category_name]'";
         $result3 = mysqli_query($con,$change3);
     }
 
@@ -51,5 +51,5 @@ session_start();
 
 mysqli_close($con);
 
-//header("Location: ./profile.php");
+header("Location: ./profile.php");
 ?>

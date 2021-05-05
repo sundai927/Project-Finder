@@ -19,7 +19,7 @@ session_start();
  while($ans = mysqli_fetch_array($result)) {
     echo "<div> Category: " . $ans['category_name'] . "</div>";
 
-    $change = "DELETE FROM Prefers WHERE userID = '$_SESSION[userID]' AND category_name = '$ans[category_name]'";
+    $change = "DELETE FROM Prefers WHERE userID='$_SESSION[userID]' AND category_name='$ans[category_name]'";
     
 
     echo $change;
@@ -29,11 +29,11 @@ session_start();
 
  
 
- if (!mysqli_query($con,$sql)) {
-    die('Error: ' . mysqli_error($con));
- }  
+//  if (!mysqli_query($con,$sql)) {
+//     die('Error: ' . mysqli_error($con));
+//  }  
 
- $result = mysqli_query($con,$sql);
+//  $result = mysqli_query($con,$sql);
 
 
  

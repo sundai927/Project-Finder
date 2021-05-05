@@ -22,6 +22,19 @@ session_start();
 
     echo $change;
     $result2 = mysqli_query($con,$change);
+    
+
+    $change2 = "SELECT * FROM Hates WHERE userID='$_SESSION[userID]' AND category_name='$ans[category_name]'";
+    $run_change2 = mysqli_query($con,$change2);
+
+    echo $change2;
+    print_r($run_change2);
+    
+    if (mysqli_num_rows($run_change2)>0){
+        $change3 = "DELETE FROM Hates WHERE userID='$_SESSION[userID]' AND category_name='$ans[category_name]'";
+        $result3 = mysqli_query($con,$change3);
+    }
+
 
  }
 
